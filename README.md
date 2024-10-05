@@ -1,7 +1,6 @@
+# ExDB
 
-# KeyValueDB
-
-`KeyValueDB` is a simple key-value database implemented in C++ that supports persistent storage and Write-Ahead Logging (WAL) for data durability and recovery. It uses a modular design with concurrency control for thread-safe operations. The database is ideal for small to medium-sized projects where lightweight and efficient key-value storage is needed.
+`ExDB` is a simple key-value database implemented in C++ that supports persistent storage and Write-Ahead Logging (WAL) for data durability and recovery. It uses a modular design with concurrency control for thread-safe operations. The database is ideal for small to medium-sized projects where lightweight and efficient key-value storage is needed.
 
 ## Features
 
@@ -18,7 +17,7 @@ To compile and run the project, you need:
 
 ## Files
 
-- `KeyValueDB.cpp`: The main C++ source code that implements the key-value database.
+- `ExDB.cpp`: The main C++ source code that implements the key-value database.
 - `db.txt`: The database file where key-value pairs are persisted.
 - `wal.txt`: The write-ahead log file where all operations are logged for recovery.
 
@@ -27,24 +26,24 @@ To compile and run the project, you need:
 Use `g++` or any other C++ compiler to compile the source code.
 
 ```bash
-g++ -std=c++11 KeyValueDB.cpp -o KeyValueDB
+g++ -std=c++11 ExDB.cpp -o ExDB
 ```
 
-This will create an executable named `KeyValueDB`.
+This will create an executable named `ExDB`.
 
 ## Usage
 
 Once the program is compiled, you can run the executable:
 
 ```bash
-./KeyValueDB
+./ExDB
 ```
 
 The database will automatically load any existing data from `db.txt` and apply any operations from `wal.txt`.
 
 ### Basic Operations
 
-The following operations are supported by the `KeyValueDB` program:
+The following operations are supported by the `ExDB` program:
 
 1. **Insert or Update (PUT)**
    - Inserts a new key-value pair or updates an existing key with a new value.
@@ -65,7 +64,7 @@ The following operations are supported by the `KeyValueDB` program:
 ### Example Operations
 
 ```cpp
-KeyValueDB kvdb("db.txt", "wal.txt");
+ExDB kvdb("db.txt", "wal.txt");
 
 // Insert or update data
 kvdb.put("name", "Alice");
@@ -93,14 +92,14 @@ name after deletion: Key not found
 
 ## How the Code Works
 
-### 1. `KeyValueDB.cpp`
+### 1. `ExDB.cpp`
 
 The main C++ file that contains all the logic for the key-value database.
 
 - **Modules**:
   - `Storage`: Handles reading from and writing to the database file (`db.txt`).
   - `WAL`: Manages write-ahead logging, storing operations in `wal.txt` before they are executed.
-  - `KeyValueDB`: The core database logic, which integrates `Storage` and `WAL`, and provides methods like `put()`, `get()`, `remove()`, and `mergeLogs()`.
+  - `ExDB`: The core database logic, which integrates `Storage` and `WAL`, and provides methods like `put()`, `get()`, `remove()`, and `mergeLogs()`.
 
 ### 2. `db.txt`
 
@@ -123,19 +122,19 @@ The main C++ file that contains all the logic for the key-value database.
 
 ## Functions Overview
 
-### `KeyValueDB::put(const std::string& key, const std::string& value)`
+### `ExDB::put(const std::string& key, const std::string& value)`
 - Inserts a new key-value pair or updates an existing one.
 - Logs the operation to `wal.txt` and applies it to the in-memory database.
 
-### `KeyValueDB::get(const std::string& key)`
+### `ExDB::get(const std::string& key)`
 - Retrieves the value associated with a key.
 - If the key is not found, returns `"Key not found"`.
 
-### `KeyValueDB::remove(const std::string& key)`
+### `ExDB::remove(const std::string& key)`
 - Deletes a key-value pair from the in-memory database.
 - Logs the delete operation to `wal.txt`.
 
-### `KeyValueDB::mergeLogs()`
+### `ExDB::mergeLogs()`
 - Merges the operations recorded in `wal.txt` into `db.txt`.
 - Clears the log file after merging to optimize disk usage.
 
