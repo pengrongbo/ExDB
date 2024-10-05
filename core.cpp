@@ -82,10 +82,10 @@ private:
 };
 
 // Core Database Module: Manages data operations, concurrency control, persistence, and logging
-class KeyValueDB {
+class ExDB {
 public:
     // Constructor initializes Storage and WAL modules and loads existing data
-    KeyValueDB(const std::string& dbFileName, const std::string& walFileName)
+    ExDB(const std::string& dbFileName, const std::string& walFileName)
         : storage_(dbFileName), wal_(walFileName) {
         // Load persisted data from disk
         db_ = storage_.load();
@@ -131,25 +131,25 @@ private:
     std::shared_mutex mutex_;                             // Mutex for concurrency control
 };
 
-// Test Cases to Demonstrate the KeyValueDB Functionality
+// Test Cases to Demonstrate the ExDB Functionality
 int main() {
-    // Initialize KeyValueDB with database and WAL file names
-    KeyValueDB kvdb("db.txt", "wal.txt");
+    // Initialize ExDB with database and WAL file names
+    ExDB exdb("db.txt", "wal.txt");
 
     // Insert data
-    kvdb.put("name", "Alice");
-    kvdb.put("age", "30");
+    exdb.put("name", "Alice");
+    exdb.put("age", "30");
 
     // Retrieve and display data
-    std::cout << "name: " << kvdb.get("name") << std::endl;
-    std::cout << "age: " << kvdb.get("age") << std::endl;
+    std::cout << "name: " << exdb.get("name") << std::endl;
+    std::cout << "age: " << exdb.get("age") << std::endl;
 
     // Delete a key-value pair
-    kvdb.remove("name");
-    std::cout << "name after deletion: " << kvdb.get("name") << std::endl;
+    exdb.remove("name");
+    std::cout << "name after deletion: " << exdb.get("name") << std::endl;
 
     // Merge logs with the main database file
-    kvdb.mergeLogs();
+    exdb.mergeLogs();
 
     return 0;
 }
