@@ -1,0 +1,42 @@
+# Ignore CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ignore CLion-specific configuration files
+.idea/
+*.iml
+
+# Ignore build directories (you may need to adjust this for your project structure)
+build/
+cmake-build-debug/
+cmake-build-release/
+cmake-build-*
+
+# Ignore compiled binary files
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Ignore log files and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore generated files from testing
+Testing/
+CTestTestfile.cmake
+LastTest.log
+
+# Ignore the Git subdirectory
+.git/
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore other common IDE files
+.vscode/

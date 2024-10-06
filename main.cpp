@@ -3,16 +3,15 @@
 #include <fstream>
 #include <string>
 #include <shared_mutex>
-#include <vector>
 
 // Storage Module: Responsible for persisting data to and loading data from disk
 class Storage {
 public:
     // Constructor initializes the storage with the database file name
-    explicit Storage(const std::string& dbFileName) : dbFileName_(dbFileName) {}
+    explicit Storage(std::string  dbFileName) : dbFileName_(std::move(dbFileName)) {}
 
     // Load data from the database file into an unordered_map
-    std::unordered_map<std::string, std::string> load() {
+    [[nodiscard]] std::unordered_map<std::string, std::string> load() const {
         std::unordered_map<std::string, std::string> db;
         std::ifstream dbFile(dbFileName_);
         std::string key, value;
@@ -24,7 +23,7 @@ public:
     }
 
     // Save the in-memory database to the disk by writing to the database file
-    void save(const std::unordered_map<std::string, std::string>& db) {
+    void save(const std::unordered_map<std::string, std::string>& db) const {
         std::ofstream dbFile(dbFileName_, std::ios_base::trunc);
         for (const auto& pair : db) {
             dbFile << pair.first << " " << pair.second << "\n";
@@ -40,24 +39,24 @@ private:
 class WAL {
 public:
     // Constructor initializes the WAL with the log file name
-    explicit WAL(const std::string& walFileName) : walFileName_(walFileName) {}
+    explicit WAL(std::string  walFileName) : walFileName_(std::move(walFileName)) {}
 
     // Log a write (PUT) operation to the WAL
-    void logWriteOperation(const std::string& key, const std::string& value) {
+    void logWriteOperation(const std::string& key, const std::string& value) const {
         std::ofstream walFile(walFileName_, std::ios_base::app);
         walFile << "PUT " << key << " " << value << "\n";
         walFile.close();
     }
 
     // Log a delete (DEL) operation to the WAL
-    void logDeleteOperation(const std::string& key) {
+    void logDeleteOperation(const std::string& key) const {
         std::ofstream walFile(walFileName_, std::ios_base::app);
         walFile << "DEL " << key << "\n";
         walFile.close();
     }
 
     // Apply the operations recorded in the WAL to the in-memory database
-    void applyLog(std::unordered_map<std::string, std::string>& db) {
+    void applyLog(std::unordered_map<std::string, std::string>& db) const {
         std::ifstream walFile(walFileName_);
         std::string operation, key, value;
         while (walFile >> operation >> key) {
@@ -72,7 +71,7 @@ public:
     }
 
     // Clear the WAL after merging logs with the main database
-    void clearLog() {
+    void clearLog() const {
         std::ofstream walFile(walFileName_, std::ios_base::trunc);
         walFile.close();
     }
